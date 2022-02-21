@@ -20,9 +20,8 @@ class EventsViewModel @Inject constructor(
 ) : ViewModel() {
 
     val events = MutableLiveData<MutableList<EventDto>?>(mutableListOf())
-    val isChecked = MutableLiveData<Boolean>(false)
 
-    fun getEvents() {
+    private fun getEvents() {
         viewModelScope.launch {
             try {
                 val events: MutableList<EventDto> = api.getEvents()
@@ -36,10 +35,8 @@ class EventsViewModel @Inject constructor(
         }
     }
 
-    fun checkEvent(body: EventsRequestDto) {
-        viewModelScope.launch {
-            isChecked.value = api.checkEvent(body).code == "200"
-        }
+    suspend fun checkEvent(body: EventsRequestDto): Boolean {
+        return api.checkEvent(body).code == "200"
     }
 
     init {

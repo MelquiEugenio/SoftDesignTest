@@ -2,21 +2,26 @@ package br.com.wolk.softdesign_teste.view
 
 import android.app.Activity
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import br.com.wolk.softdesign_teste.R
 import br.com.wolk.softdesign_teste.model.network.dto.EventDto
 import br.com.wolk.softdesign_teste.model.network.dto.EventsRequestDto
 import br.com.wolk.softdesign_teste.viewmodel.EventsViewModel
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.math.RoundingMode
 import java.net.URL
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,6 +43,7 @@ class EventsListAdapter(
         val date: TextView = view.findViewById(R.id.date_text_view)
         val imageView: ImageView = view.findViewById(R.id.event_image_view)
         val checkInButton: MaterialButton = view.findViewById(R.id.check_in_button)
+        val card: MaterialCardView = view.findViewById(R.id.card)
     }
 
     // Create new views (invoked by the layout manager)
@@ -52,10 +58,15 @@ class EventsListAdapter(
     // Replace the contents of a view (invoked by the layout manager)
     @OptIn(DelicateCoroutinesApi::class)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        // Get element from your dataset at this position and replace the
-        // contents of the view with that element
-        viewHolder.title.text = dataSet!![position].title
+
+        val df = DecimalFormat("#.##")
+        df.roundingMode = RoundingMode.DOWN
+        val priceNumber = df.format(dataSet!![position].price).replace(".", ",")
+        val price = "R$ $priceNumber"
+
+        viewHolder.title.text = dataSet[position].title
         viewHolder.description.text = dataSet[position].description
+        viewHolder.checkInButton.text = price
 
         val formatter = SimpleDateFormat("dd/MM/yyyy - hh:mm")
         val calendar = Calendar.getInstance()
@@ -70,23 +81,57 @@ class EventsListAdapter(
                     if (bmp != null) {
                         viewHolder.imageView.visibility = View.VISIBLE
                         viewHolder.imageView.setImageBitmap(bmp)
-                    } else {
-                        viewHolder.imageView.visibility = View.GONE
                     }
                 }
             } catch (e: Exception) {
-                viewHolder.imageView.visibility = View.GONE
                 e.printStackTrace()
             }
         }
 
-        // Diálogo de motor desligado
+        // Dialog todo
 
         viewHolder.checkInButton.setOnClickListener {
-            val request = EventsRequestDto(eventId = dataSet[position].id, name = "teste", email = "teste@gmail.com")
-            viewModel.checkEvent(request)
-        }
 
+            GlobalScope.launch {
+                try {
+                    activity.runOnUiThread {
+                        viewHolder.checkInButton.text = "Carregando..."
+                    }
+
+                    val request = EventsRequestDto(
+                        eventId = dataSet[position].id,
+                        name = "teste",
+                        email = "teste@gmail.com"
+                    )
+                    val isChecked = viewModel.checkEvent(request)
+
+                    activity.runOnUiThread {
+                        if (isChecked) {
+                            viewHolder.checkInButton.text = "Inscrito!"
+                            viewHolder.checkInButton.setBackgroundColor(Color.parseColor("#006400"))
+                            viewHolder.card.isChecked = true
+                        } else {
+                            viewHolder.checkInButton.text = price
+                            Toast.makeText(
+                                activity.applicationContext,
+                                "Ops, ocorreu um erro ao se inscrever.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    activity.runOnUiThread {
+                        viewHolder.checkInButton.text = price
+                        Toast.makeText(
+                            activity.applicationContext,
+                            "Ops, ocorreu um erro ao se inscrever.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
