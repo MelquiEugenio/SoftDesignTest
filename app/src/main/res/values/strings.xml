@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Eventos</string>
+    <string name="app_name">Teste SoftDesign</string>
     <string name="event_image">Event image.</string>
     <string name="email">Entre seu email</string>
     <string name="name">Entre seu nome</string>

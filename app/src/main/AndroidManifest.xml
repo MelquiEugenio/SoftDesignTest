@@ -16,6 +16,7 @@
         android:theme="@style/Theme.TesteSoftDesign">
         <activity
             android:name="br.com.wolk.softdesign_teste.view.MainActivity"
+            android:label="Eventos"
             android:exported="false">
         </activity>
 
