@@ -12,6 +12,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -41,7 +42,7 @@ import java.util.*
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
+    private lateinit var materialAlertDialogBuilder: AlertDialog.Builder
     private lateinit var customAlertDialogView : View
     private lateinit var nameTextField : TextInputLayout
     private lateinit var emailTextField : TextInputLayout
@@ -84,15 +85,15 @@ class MainActivity : AppCompatActivity() {
             setRecyclerListener(recycleListener)
         }
 
-        materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
+        materialAlertDialogBuilder = AlertDialog.Builder(this)
         customAlertDialogView = LayoutInflater.from(this)
             .inflate(R.layout.credentials_dialog, null, false)
 
         viewModel.events.observe(this) { events ->
             if (events != null) {
                 progressBar.visibility = View.GONE
-                if (viewModel.getName() == "test") launchCustomAlertDialog(viewModel)
                 (mapAdapter as EventsListAdapter).updateData(events)
+                if (viewModel.getName() == "test") launchCustomAlertDialog(viewModel)
             } else {
                 progressBar.visibility = View.GONE
                 errorImageView.visibility = View.VISIBLE
