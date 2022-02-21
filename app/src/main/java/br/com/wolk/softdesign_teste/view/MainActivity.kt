@@ -27,7 +27,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -42,7 +41,7 @@ import java.util.*
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var materialAlertDialogBuilder: AlertDialog.Builder
+    private lateinit var alertDialogBuilder: AlertDialog.Builder
     private lateinit var customAlertDialogView : View
     private lateinit var nameTextField : TextInputLayout
     private lateinit var emailTextField : TextInputLayout
@@ -85,7 +84,7 @@ class MainActivity : AppCompatActivity() {
             setRecyclerListener(recycleListener)
         }
 
-        materialAlertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder = AlertDialog.Builder(this)
         customAlertDialogView = LayoutInflater.from(this)
             .inflate(R.layout.credentials_dialog, null, false)
 
@@ -110,8 +109,7 @@ class MainActivity : AppCompatActivity() {
         nameTextField = customAlertDialogView.findViewById(R.id.name_text_field)
         emailTextField = customAlertDialogView.findViewById(R.id.email_text_field)
 
-        // Building the Alert dialog using materialAlertDialogBuilder instance
-        val dialog = materialAlertDialogBuilder.setView(customAlertDialogView)
+        val dialog = alertDialogBuilder.setView(customAlertDialogView)
             .setCancelable(false)
             .setPositiveButton("Confirmar", null)
             .create()

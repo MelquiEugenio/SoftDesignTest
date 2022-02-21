@@ -16,6 +16,12 @@
         android:theme="@style/Theme.TesteSoftDesign">
         <activity
             android:name="br.com.wolk.softdesign_teste.view.MainActivity"
+            android:exported="false">
+        </activity>
+
+        <activity
+            android:name="br.com.wolk.softdesign_teste.view.SplashActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
