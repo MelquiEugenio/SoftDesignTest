@@ -38,7 +38,7 @@ object EventsModule {
     @Provides
     @Singleton
     fun provideEventsApi(client: OkHttpClient): EventsApi {
-        val BASE_URL = "https://5f5a8f24d44d640016169133.mockapi.io/api"
+        val BASE_URL = "https://5f5a8f24d44d640016169133.mockapi.io"
 
         return Retrofit.Builder()
             .baseUrl(BASE_URL)

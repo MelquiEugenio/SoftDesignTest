@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Teste Soft Design</string>
+    <string name="app_name">Eventos</string>
+    <string name="event_image">Event image.</string>
 </resources>

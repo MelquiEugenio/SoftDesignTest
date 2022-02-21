@@ -21,14 +21,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Maps -->
-            <com.google.android.gms.maps.MapView
-                android:id="@+id/map_view"
+            <ImageView
+                android:id="@+id/event_image_view"
                 android:layout_width="match_parent"
-                android:layout_height="148dp"
-
-                app:liteMode="true"
-                app:mapType="normal" />
+                android:layout_height="180dp"
+                android:contentDescription="@string/event_image"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_baseline_image_24" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -38,12 +37,14 @@
 
                 <!-- Title, secondary and supporting text -->
                 <TextView
+                    android:id="@+id/title_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Title"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <TextView
+                    android:id="@+id/description_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -52,10 +53,11 @@
                     android:textColor="?android:attr/textColorSecondary" />
 
                 <TextView
+                    android:id="@+id/date_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="14/05/1994"
+                    android:layout_marginTop="8dp"
+                    android:text="Date."
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="?android:attr/textColorSecondary" />
 
@@ -72,9 +74,11 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/check_in_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="R$29.99"
+                    android:clickable="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -90,6 +94,15 @@
                     app:srcCompat="@drawable/ic_baseline_share_24" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Maps -->
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/map_view"
+                android:layout_width="match_parent"
+                android:layout_height="148dp"
+
+                app:liteMode="true"
+                app:mapType="normal" />
 
         </LinearLayout>
 

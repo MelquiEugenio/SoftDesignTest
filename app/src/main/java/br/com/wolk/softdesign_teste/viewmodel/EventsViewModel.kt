@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.wolk.softdesign_teste.model.network.EventsApi
-import br.com.wolk.softdesign_teste.model.network.dto.Event
+import br.com.wolk.softdesign_teste.model.network.dto.EventDto
 import br.com.wolk.softdesign_teste.model.network.dto.EventsRequestDto
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,18 +19,19 @@ class EventsViewModel @Inject constructor(
     private val api: EventsApi,
 ) : ViewModel() {
 
-    private val state = MutableLiveData<List<Event>?>(emptyList())
-    private val isChecked = MutableLiveData<Boolean>(false)
+    val events = MutableLiveData<MutableList<EventDto>?>(mutableListOf())
+    val isChecked = MutableLiveData<Boolean>(false)
 
-    private fun getEvents() {
+    fun getEvents() {
         viewModelScope.launch {
             try {
-                val events: List<Event> = api.getEvents().events
-                state.value = events
+                val events: MutableList<EventDto> = api.getEvents()
+                this@EventsViewModel.events.value = events
 
             } catch (e: Exception) {
                 // I'll consider null as an error in the API query.
-                state.value = null
+                e.printStackTrace()
+                events.value = null
             }
         }
     }

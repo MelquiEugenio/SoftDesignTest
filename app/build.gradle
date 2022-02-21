@@ -60,6 +60,7 @@ dependencies {
     def lifecycle_version = "2.5.0-alpha02"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+    implementation "androidx.activity:activity-ktx:1.4.0"
 
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1'
@@ -69,4 +70,8 @@ dependencies {
 
     // Material Design
     implementation 'com.google.android.material:material:1.5.0'
+
+    // Recycler View
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
+    implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
 }
