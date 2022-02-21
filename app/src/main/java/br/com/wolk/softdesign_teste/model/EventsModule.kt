@@ -1,9 +1,13 @@
 package br.com.wolk.softdesign_teste.model
 
+import android.app.Activity
+import android.content.Context
 import br.com.wolk.softdesign_teste.model.network.EventsApi
+import br.com.wolk.softdesign_teste.view.MainActivity
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -46,5 +50,11 @@ object EventsModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(EventsApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDataSave(@ApplicationContext context: Context): DataSave {
+        return DataSave(context)
     }
 }

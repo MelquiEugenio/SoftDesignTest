@@ -46,9 +46,7 @@ class EventsListAdapter(
         val card: MaterialCardView = view.findViewById(R.id.card)
     }
 
-    // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.event_card, viewGroup, false)
 
@@ -73,6 +71,7 @@ class EventsListAdapter(
         calendar.timeInMillis = dataSet[position].date
         viewHolder.date.text = formatter.format(calendar.time).replace("-", "às")
 
+        // Get event image
         GlobalScope.launch {
             try {
                 val url = URL(dataSet[position].image)
@@ -88,10 +87,7 @@ class EventsListAdapter(
             }
         }
 
-        // Dialog todo
-
         viewHolder.checkInButton.setOnClickListener {
-
             GlobalScope.launch {
                 try {
                     activity.runOnUiThread {
@@ -100,8 +96,8 @@ class EventsListAdapter(
 
                     val request = EventsRequestDto(
                         eventId = dataSet[position].id,
-                        name = "teste",
-                        email = "teste@gmail.com"
+                        name = viewModel.getName(),
+                        email = viewModel.getEmail()
                     )
                     val isChecked = viewModel.checkEvent(request)
 
