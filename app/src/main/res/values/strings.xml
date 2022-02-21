@@ -4,4 +4,6 @@
     <string name="email">Entre seu email</string>
     <string name="name">Entre seu nome</string>
     <string name="preference_file_key">SHARED_PREFERENCES</string>
+    <string name="linear">Linear</string>
+    <string name="grid">Grid</string>
 </resources>
