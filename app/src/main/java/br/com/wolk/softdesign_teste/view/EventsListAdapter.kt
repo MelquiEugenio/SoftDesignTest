@@ -1,6 +1,7 @@
 package br.com.wolk.softdesign_teste.view
 
 import android.app.Activity
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import br.com.wolk.softdesign_teste.R
 import br.com.wolk.softdesign_teste.model.network.dto.EventDto
@@ -43,6 +45,7 @@ class EventsListAdapter(
         val date: TextView = view.findViewById(R.id.date_text_view)
         val imageView: ImageView = view.findViewById(R.id.event_image_view)
         val checkInButton: MaterialButton = view.findViewById(R.id.check_in_button)
+        val shareButton: ImageView = view.findViewById(R.id.share_button)
         val card: MaterialCardView = view.findViewById(R.id.card)
     }
 
@@ -65,6 +68,17 @@ class EventsListAdapter(
         viewHolder.title.text = dataSet[position].title
         viewHolder.description.text = dataSet[position].description
         viewHolder.checkInButton.text = price
+
+        viewHolder.shareButton.setOnClickListener {
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, dataSet[position].title + ". Baixe o app e se inscreva.")
+                type = "text/plain"
+            }
+
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(activity.applicationContext, shareIntent, null)
+        }
 
         val formatter = SimpleDateFormat("dd/MM/yyyy - hh:mm")
         val calendar = Calendar.getInstance()
