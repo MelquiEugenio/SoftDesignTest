@@ -7,4 +7,13 @@
     <string name="linear">Linear</string>
     <string name="grid">Grid</string>
     <string name="melqui_apps">Melqui Apps</string>
+    <string name="credentials">Olá!\nInforme seus dados.</string>
+    <string name="loading">Carregando…</string>
+    <string name="sign_up_confirmed">Inscrito</string>
+    <string name="sign_up_failed">Ops, ocorreu um erro ao se inscrever.</string>
+    <string name="share_message">. Baixe o app e se inscreva.</string>
+    <string name="email_error">Entre um email válido</string>
+    <string name="name_error">Entre um nome</string>
+    <string name="confirm">Confirmar</string>
+    <string name="events_query_error">Algo impediu a lista de carregar. Tente novamente.</string>
 </resources>

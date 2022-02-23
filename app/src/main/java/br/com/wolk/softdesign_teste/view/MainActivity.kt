@@ -42,9 +42,9 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var alertDialogBuilder: AlertDialog.Builder
-    private lateinit var customAlertDialogView : View
-    private lateinit var nameTextField : TextInputLayout
-    private lateinit var emailTextField : TextInputLayout
+    private lateinit var customAlertDialogView: View
+    private lateinit var nameTextField: TextInputLayout
+    private lateinit var emailTextField: TextInputLayout
 
     private val linearLayoutManager: LinearLayoutManager by lazy {
         LinearLayoutManager(this)
@@ -54,13 +54,6 @@ class MainActivity : AppCompatActivity() {
     }
     private lateinit var recyclerView: RecyclerView
     private lateinit var mapAdapter: RecyclerView.Adapter<EventsListAdapter.ViewHolder>
-
-    /**
-     * RecycleListener that completely clears the [com.google.android.gms.maps.GoogleMap]
-     * attached to a row in the RecyclerView.
-     * Sets the map type to [com.google.android.gms.maps.GoogleMap.MAP_TYPE_NONE] and clears
-     * the map.
-     */
     private val recycleListener = RecyclerView.RecyclerListener { holder ->
         val mapHolder = holder as EventsListAdapter.ViewHolder
         mapHolder.clearView()
@@ -75,8 +68,6 @@ class MainActivity : AppCompatActivity() {
         val errorImageView = findViewById<ImageView>(R.id.error_image_view)
 
         mapAdapter = EventsListAdapter(viewModel.events.value, viewModel, this)
-
-        // Initialise the RecyclerView.
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view).apply {
             setHasFixedSize(true)
             layoutManager = linearLayoutManager
@@ -98,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                 errorImageView.visibility = View.VISIBLE
                 Toast.makeText(
                     this,
-                    "Algo impediu a lista de carregar. Tente novamente.",
+                    getString(R.string.events_query_error),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -111,7 +102,7 @@ class MainActivity : AppCompatActivity() {
 
         val dialog = alertDialogBuilder.setView(customAlertDialogView)
             .setCancelable(false)
-            .setPositiveButton("Confirmar", null)
+            .setPositiveButton(getString(R.string.confirm), null)
             .create()
 
         dialog.show()
@@ -120,9 +111,9 @@ class MainActivity : AppCompatActivity() {
             val email = emailTextField.editText?.text.toString()
 
             when {
-                name.isBlank() -> nameTextField.error = "Entre um nome"
+                name.isBlank() -> nameTextField.error = getString(R.string.name_error)
                 email.isBlank() || !email.contains("@") -> {
-                    emailTextField.error = "Entre um email válido"
+                    emailTextField.error = getString(R.string.email_error)
                 }
                 else -> {
                     viewModel.saveCredentials(name, email)
@@ -158,6 +149,7 @@ class MainActivity : AppCompatActivity() {
          * (custom ViewHolder).
          */
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReadyCallback {
+
             val title: TextView = view.findViewById(R.id.title_text_view)
             val description: TextView = view.findViewById(R.id.description_text_view)
             val date: TextView = view.findViewById(R.id.date_text_view)
@@ -166,8 +158,7 @@ class MainActivity : AppCompatActivity() {
             val shareButton: ImageView = view.findViewById(R.id.share_button)
             val card: MaterialCardView = view.findViewById(R.id.card)
 
-            val mapView: MapView = view.findViewById(R.id.map_view)
-
+            private val mapView: MapView = view.findViewById(R.id.map_view)
             private lateinit var map: GoogleMap
             private lateinit var latLng: LatLng
 
@@ -244,7 +235,10 @@ class MainActivity : AppCompatActivity() {
             viewHolder.shareButton.setOnClickListener {
                 val sendIntent: Intent = Intent().apply {
                     action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, dataSet[position].title + ". Baixe o app e se inscreva.")
+                    putExtra(
+                        Intent.EXTRA_TEXT,
+                        dataSet[position].title + getString(R.string.share_message)
+                    )
                     type = "text/plain"
                 }
 
@@ -277,7 +271,7 @@ class MainActivity : AppCompatActivity() {
                 GlobalScope.launch {
                     try {
                         activity.runOnUiThread {
-                            viewHolder.checkInButton.text = "Carregando..."
+                            viewHolder.checkInButton.text = getString(R.string.loading)
                         }
 
                         val request = EventsRequestDto(
@@ -289,14 +283,15 @@ class MainActivity : AppCompatActivity() {
 
                         activity.runOnUiThread {
                             if (isChecked) {
-                                viewHolder.checkInButton.text = "Inscrito!"
+                                viewHolder.checkInButton.text =
+                                    getString(R.string.sign_up_confirmed)
                                 viewHolder.checkInButton.setBackgroundColor(Color.parseColor("#006400"))
                                 viewHolder.card.isChecked = true
                             } else {
                                 viewHolder.checkInButton.text = price
                                 Toast.makeText(
                                     activity.applicationContext,
-                                    "Ops, ocorreu um erro ao se inscrever.",
+                                    getString(R.string.sign_up_failed),
                                     Toast.LENGTH_LONG
                                 ).show()
                             }
@@ -307,7 +302,7 @@ class MainActivity : AppCompatActivity() {
                             viewHolder.checkInButton.text = price
                             Toast.makeText(
                                 activity.applicationContext,
-                                "Ops, ocorreu um erro ao se inscrever.",
+                                getString(R.string.sign_up_failed),
                                 Toast.LENGTH_LONG
                             ).show()
                         }
