@@ -8,7 +8,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -29,6 +28,8 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.credentials_dialog.view.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -64,11 +65,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val viewModel: EventsViewModel by viewModels()
-        val progressBar = findViewById<ProgressBar>(R.id.progress_bar)
-        val errorImageView = findViewById<ImageView>(R.id.error_image_view)
 
         mapAdapter = EventsListAdapter(viewModel.events.value, viewModel, this)
-        recyclerView = findViewById<RecyclerView>(R.id.recycler_view).apply {
+        recyclerView = recycler_view.apply {
             setHasFixedSize(true)
             layoutManager = linearLayoutManager
             adapter = mapAdapter
@@ -81,12 +80,12 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.events.observe(this) { events ->
             if (events != null) {
-                progressBar.visibility = View.GONE
+                progress_bar.visibility = View.GONE
                 (mapAdapter as EventsListAdapter).updateData(events)
                 if (viewModel.getName() == "test") launchCustomAlertDialog(viewModel)
             } else {
-                progressBar.visibility = View.GONE
-                errorImageView.visibility = View.VISIBLE
+                progress_bar.visibility = View.GONE
+                error_image_view.visibility = View.VISIBLE
                 Toast.makeText(
                     this,
                     getString(R.string.events_query_error),
@@ -97,8 +96,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun launchCustomAlertDialog(viewModel: EventsViewModel) {
-        nameTextField = customAlertDialogView.findViewById(R.id.name_text_field)
-        emailTextField = customAlertDialogView.findViewById(R.id.email_text_field)
+        nameTextField = customAlertDialogView.name_text_field
+        emailTextField = customAlertDialogView.email_text_field
 
         val dialog = alertDialogBuilder.setView(customAlertDialogView)
             .setCancelable(false)
@@ -183,8 +182,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onMapReady(googleMap: GoogleMap) {
                 MapsInitializer.initialize(applicationContext)
-                // If map is not initialised properly
-                map = googleMap ?: return
+                map = googleMap
                 setMapLocation()
             }
 

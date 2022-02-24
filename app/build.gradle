@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
     id 'dagger.hilt.android.plugin'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
@@ -79,4 +80,7 @@ dependencies {
 
     // Google Maps
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
+
+    // Fixes
+    implementation "androidx.startup:startup-runtime:1.1.1"
 }
