@@ -1,10 +1,10 @@
-package br.com.wolk.softdesign_teste.view
+package br.com.softdesign.teste.view
 
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
-import br.com.wolk.softdesign_teste.R
+import br.com.softdesign.teste.R
 import kotlinx.coroutines.*
 
 @DelicateCoroutinesApi

@@ -10,7 +10,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "br.com.wolk.testesoftdesign"
+        applicationId "br.com.softdesign.teste"
         minSdk 19
         targetSdk 31
         versionCode 1

@@ -1,13 +1,12 @@
-package br.com.wolk.softdesign_teste.viewmodel
+package br.com.softdesign.teste.viewmodel
 
-import android.app.Activity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.wolk.softdesign_teste.model.DataSave
-import br.com.wolk.softdesign_teste.model.network.EventsApi
-import br.com.wolk.softdesign_teste.model.network.dto.EventDto
-import br.com.wolk.softdesign_teste.model.network.dto.EventsRequestDto
+import br.com.softdesign.teste.model.DataSave
+import br.com.softdesign.teste.model.network.EventsApi
+import br.com.softdesign.teste.model.network.dto.EventDto
+import br.com.softdesign.teste.model.network.dto.EventsRequestDto
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

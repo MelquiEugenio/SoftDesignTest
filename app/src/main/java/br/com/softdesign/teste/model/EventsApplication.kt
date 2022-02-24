@@ -1,4 +1,4 @@
-package br.com.wolk.softdesign_teste.model
+package br.com.softdesign.teste.model
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

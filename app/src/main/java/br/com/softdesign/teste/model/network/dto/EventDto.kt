@@ -1,4 +1,4 @@
-package br.com.wolk.softdesign_teste.model.network.dto
+package br.com.softdesign.teste.model.network.dto
 
 data class EventDto (
     val people: List<Any>,

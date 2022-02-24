@@ -1,4 +1,4 @@
-package br.com.wolk.softdesign_teste.view
+package br.com.softdesign.teste.view
 
 import android.app.Activity
 import android.content.DialogInterface
@@ -18,10 +18,10 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import br.com.wolk.softdesign_teste.R
-import br.com.wolk.softdesign_teste.model.network.dto.EventDto
-import br.com.wolk.softdesign_teste.model.network.dto.EventsRequestDto
-import br.com.wolk.softdesign_teste.viewmodel.EventsViewModel
+import br.com.softdesign.teste.R
+import br.com.softdesign.teste.model.network.dto.EventDto
+import br.com.softdesign.teste.model.network.dto.EventsRequestDto
+import br.com.softdesign.teste.viewmodel.EventsViewModel
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions

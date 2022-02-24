@@ -1,9 +1,7 @@
-package br.com.wolk.softdesign_teste.model
+package br.com.softdesign.teste.model
 
-import android.app.Activity
 import android.content.Context
-import br.com.wolk.softdesign_teste.model.network.EventsApi
-import br.com.wolk.softdesign_teste.view.MainActivity
+import br.com.softdesign.teste.model.network.EventsApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,4 +1,4 @@
-package br.com.wolk.softdesign_teste
+package br.com.softdesign.teste
 
 import org.junit.Test
 

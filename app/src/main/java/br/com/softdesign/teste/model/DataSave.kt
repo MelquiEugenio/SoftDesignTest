@@ -1,4 +1,4 @@
-package br.com.wolk.softdesign_teste.model
+package br.com.softdesign.teste.model
 
 import android.content.Context
 import android.content.SharedPreferences

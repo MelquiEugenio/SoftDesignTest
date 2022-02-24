@@ -1,8 +1,8 @@
-package br.com.wolk.softdesign_teste.model.network
+package br.com.softdesign.teste.model.network
 
-import br.com.wolk.softdesign_teste.model.network.dto.EventDto
-import br.com.wolk.softdesign_teste.model.network.dto.EventsRequestDto
-import br.com.wolk.softdesign_teste.model.network.dto.EventsResponseDto
+import br.com.softdesign.teste.model.network.dto.EventDto
+import br.com.softdesign.teste.model.network.dto.EventsRequestDto
+import br.com.softdesign.teste.model.network.dto.EventsResponseDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
