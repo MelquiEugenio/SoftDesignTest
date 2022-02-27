@@ -241,6 +241,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 val shareIntent = Intent.createChooser(sendIntent, null)
+                shareIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 ContextCompat.startActivity(activity.applicationContext, shareIntent, null)
             }
 
