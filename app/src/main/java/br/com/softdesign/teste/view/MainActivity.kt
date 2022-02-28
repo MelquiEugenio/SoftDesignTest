@@ -6,8 +6,6 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
-import android.text.TextUtils
-import android.util.Patterns
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -88,6 +86,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.lite_list_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.settings -> launchCustomAlertDialog(viewModel)
+            else -> return false
+        }
+        return true
+    }
+
     private fun launchCustomAlertDialog(viewModel: EventsViewModel) {
         val customAlertDialogView: View = LayoutInflater.from(this)
             .inflate(R.layout.credentials_dialog, null, false)
@@ -116,20 +127,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    /** Create options menu to set new credentials if the user wishes. */
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.lite_list_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.settings -> launchCustomAlertDialog(viewModel)
-            else -> return false
-        }
-        return true
     }
 
     inner class EventsListAdapter(
@@ -307,7 +304,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Return the size of your dataset (invoked by the layout manager)
         override fun getItemCount() = dataSet?.size ?: 0
 
         fun updateData(newData: MutableList<EventDto>?) {
