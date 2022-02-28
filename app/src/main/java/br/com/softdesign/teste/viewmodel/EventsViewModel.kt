@@ -1,5 +1,8 @@
 package br.com.softdesign.teste.viewmodel
 
+import android.os.Build
+import android.text.TextUtils
+import android.util.Patterns
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -51,6 +54,14 @@ class EventsViewModel @Inject constructor(
 
     fun getEmail(): String {
         return dataSave.getDataEmail()
+    }
+
+    fun isValidEmail(target: CharSequence): Boolean {
+        return if (TextUtils.isEmpty(target)) {
+            false
+        } else {
+            Patterns.EMAIL_ADDRESS.matcher(target).matches()
+        }
     }
 
     init {

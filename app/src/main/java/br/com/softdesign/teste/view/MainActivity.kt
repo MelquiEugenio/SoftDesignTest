@@ -6,6 +6,8 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
+import android.text.TextUtils
+import android.util.Patterns
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,7 +16,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.softdesign.teste.R
@@ -26,7 +27,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.credentials_dialog.view.*
@@ -39,19 +39,14 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var alertDialogBuilder: AlertDialog.Builder
-    private lateinit var customAlertDialogView: View
-    private lateinit var nameTextField: TextInputLayout
-    private lateinit var emailTextField: TextInputLayout
+    private val viewModel: EventsViewModel by viewModels()
 
     private val linearLayoutManager: LinearLayoutManager by lazy {
         LinearLayoutManager(this)
-    }
-    private val gridLayoutManager: GridLayoutManager by lazy {
-        GridLayoutManager(this, 2)
     }
     private lateinit var recyclerView: RecyclerView
     private lateinit var mapAdapter: RecyclerView.Adapter<EventsListAdapter.ViewHolder>
@@ -64,8 +59,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val viewModel: EventsViewModel by viewModels()
-
+        // RecyclerView
         mapAdapter = EventsListAdapter(viewModel.events.value, viewModel, this)
         recyclerView = recycler_view.apply {
             setHasFixedSize(true)
@@ -74,15 +68,14 @@ class MainActivity : AppCompatActivity() {
             setRecyclerListener(recycleListener)
         }
 
-        alertDialogBuilder = AlertDialog.Builder(this)
-        customAlertDialogView = LayoutInflater.from(this)
-            .inflate(R.layout.credentials_dialog, null, false)
-
         viewModel.events.observe(this) { events ->
             if (events != null) {
-                progress_bar.visibility = View.GONE
-                (mapAdapter as EventsListAdapter).updateData(events)
-                if (viewModel.getName() == "test") launchCustomAlertDialog(viewModel)
+                if (events.isNotEmpty()) {
+                    progress_bar.visibility = View.GONE
+                    (mapAdapter as EventsListAdapter).updateData(events)
+                    // Get credentials on start
+                    if (viewModel.getName() == "test") launchCustomAlertDialog(viewModel)
+                }
             } else {
                 progress_bar.visibility = View.GONE
                 error_image_view.visibility = View.VISIBLE
@@ -96,22 +89,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun launchCustomAlertDialog(viewModel: EventsViewModel) {
-        nameTextField = customAlertDialogView.name_text_field
-        emailTextField = customAlertDialogView.email_text_field
-
+        val customAlertDialogView: View = LayoutInflater.from(this)
+            .inflate(R.layout.credentials_dialog, null, false)
+        val nameTextField = customAlertDialogView.name_text_field
+        val emailTextField = customAlertDialogView.email_text_field
+        val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this)
         val dialog = alertDialogBuilder.setView(customAlertDialogView)
             .setCancelable(false)
             .setPositiveButton(getString(R.string.confirm), null)
             .create()
 
         dialog.show()
+
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
             val name = nameTextField.editText?.text.toString()
             val email = emailTextField.editText?.text.toString()
 
             when {
                 name.isBlank() -> nameTextField.error = getString(R.string.name_error)
-                email.isBlank() || !email.contains("@") -> {
+                email.isBlank() || !viewModel.isValidEmail(email) -> {
                     emailTextField.error = getString(R.string.email_error)
                 }
                 else -> {
@@ -122,16 +118,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /** Create options menu to switch between the linear and grid layout managers. */
+    /** Create options menu to set new credentials if the user wishes. */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.lite_list_menu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        recyclerView.layoutManager = when (item.itemId) {
-            R.id.layout_linear -> linearLayoutManager
-            R.id.layout_grid -> gridLayoutManager
+        when (item.itemId) {
+            R.id.settings -> launchCustomAlertDialog(viewModel)
             else -> return false
         }
         return true
@@ -200,10 +195,12 @@ class MainActivity : AppCompatActivity() {
 
             /** This function is called by the recycleListener, when we need to clear the map. */
             fun clearView() {
-                with(map) {
-                    // Clear the map and free up resources by changing the map type to none
-                    clear()
-                    mapType = GoogleMap.MAP_TYPE_NONE
+                if (::map.isInitialized) {
+                    with(map) {
+                        // Clear the map and free up resources by changing the map type to none
+                        clear()
+                        mapType = GoogleMap.MAP_TYPE_NONE
+                    }
                 }
             }
         }
@@ -311,7 +308,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Return the size of your dataset (invoked by the layout manager)
-        override fun getItemCount() = dataSet!!.size
+        override fun getItemCount() = dataSet?.size ?: 0
 
         fun updateData(newData: MutableList<EventDto>?) {
             dataSet!!.clear()
